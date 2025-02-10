@@ -1,0 +1,296 @@
+<html><head>
+  <title>Meeting to Article Generation</title>
+  <style>
+
+body {
+      /* background-image: url('https://images.unsplash.com/photo-1566305977571-5666677c6e98?q=80&w=1890&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); */
+      background-size: cover;
+      background-color: rgb(247, 247, 249);
+    }
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f2f2f2;
+  padding: 20px;
+  line-height: 1.6;
+  color: #333;
+}
+
+h2 {
+  font-family: "Arial", sans-serif;
+  font-weight: 700;
+  color: #053e91;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: -10px;
+  margin-top: 5px;
+}
+
+form {
+  /* background-color: #fff; */
+  padding: 20px;
+  border-radius: 8px;
+  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */
+}
+
+input[type="file"] {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 10px 0;
+  box-sizing: border-box;
+  /* border: 2px solid #6c757d; */
+  border-radius: 45px;
+  background-color: #98c3ef;
+  color: #495057;
+}
+
+button {
+  padding: 12px 24px;
+  background-color: #053e91;
+  color: #fff;
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+  width: 10%;
+  display: block;
+  margin: 20px auto;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0b5ed7;
+}
+
+#output {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.bg {
+  /* background: #f8f9fa; */
+  padding: 25px;
+  text-align: center;
+}
+
+.cbg {
+  /* background: #f8f9fa; */
+  padding: 20px;
+  border-radius: 8px;
+  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); */
+  margin-top: -15px;
+}
+
+h3#sh {
+  font-family: "Arial", sans-serif;
+  color: #0d6efd;
+  text-align: left;
+  padding: 10px 0;
+}
+
+textarea#outputTextArea {
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-family: "Arial", sans-serif;
+  resize: none;
+}
+
+div#boldtext {
+  border: 2px solid #053e91;
+  border-radius: 8px;
+  width: 100%;
+  height: 550px;
+  background-color: #fff;
+  overflow: auto;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-family: "Arial", sans-serif;
+}
+
+  </style>
+
+<style> 
+  #spinner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5); 
+    z-index: 100;
+  }
+  
+  #spinner img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .loader {
+    color: #ffffff;
+    font-size: 90px;
+    text-indent: -9999em;
+    overflow: hidden;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    margin: 200px auto;
+    position: relative;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load6 1.7s infinite ease, round 1.7s infinite ease;
+    animation: load6 1.7s infinite ease, round 1.7s infinite ease;
+  }
+  @-webkit-keyframes load6 {
+    0% {
+      box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    5%,
+    95% {
+      box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    10%,
+    59% {
+      box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+    }
+    20% {
+      box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+    }
+    38% {
+      box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+    }
+    100% {
+      box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+  }
+  @keyframes load6 {
+    0% {
+      box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    5%,
+    95% {
+      box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    10%,
+    59% {
+      box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+    }
+    20% {
+      box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+    }
+    38% {
+      box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+    }
+    100% {
+      box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+  }
+  @-webkit-keyframes round {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes round {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  } 
+
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 5px grey; */
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #98c3ef;
+  border-radius: 10px;
+}
+  </style> 
+
+</head>
+<body>
+  <h2>Call Transcript Analysis</h2>
+  <form id="uploadForm" action="/process_transcript" method="post" enctype="multipart/form-data">
+    <div class="bg">
+    <input type="file" id="textFile" name="textFile" accept=".txt, .csv">
+    <button type="button" id="btnsubmit" onclick="process_transcript()">Submit</button>
+  </div>
+  <div class="cbg">
+    <h3></h3>
+    <div id="boldtext"></div>
+    </div>
+    <!-- Container for spinner -->
+<div id="spinner">
+
+  <div class="loader">Loading...</div>
+</div>
+
+<!-- Content -->
+<div id="content"></div>
+
+  </form>
+
+  <script>
+
+    function process_transcript() {
+      showSpinner();
+      // Send a request to the server to trigger the Python function
+      fetch('/process_transcript', {
+        method: 'POST',
+        body: JSON.stringify({url: document.querySelector('input[name="textFile"]').value}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json()) 
+      .then(data => {
+        document.getElementById('boldtext').innerHTML = data.video_summary;
+        hideSpinner();
+      });
+    }
+  
+  // Get elements
+const spinner = document.getElementById('spinner');
+const content = document.getElementById('content');
+
+// Show spinner
+function showSpinner() {
+  spinner.style.display = 'block';
+  content.style.opacity = '0.25'; 
+}
+
+// Hide spinner
+function hideSpinner() {
+  spinner.style.display = 'none';
+  content.style.opacity = '1';
+}
+
+  </script>
+
+
+</body></html>
